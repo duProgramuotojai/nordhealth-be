@@ -2,12 +2,16 @@
 from rest_framework import serializers
 
 # import model from models.py
-from .models import GeeksModel
+from .models import GeeksModel, ProductsModel
 
 
-# Create a model serializer
 class GeeksSerializer(serializers.HyperlinkedModelSerializer):
-    # specify model and fields
     class Meta:
         model = GeeksModel
         fields = ('title', 'description')
+
+
+class ProductsSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ProductsModel
+        fields = ('id', 'title', 'description', 'barcode', 'price')

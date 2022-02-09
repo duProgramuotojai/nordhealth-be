@@ -72,6 +72,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'nordhealth.wsgi.application'
+APPEND_SLASH = True
 
 
 # Database
