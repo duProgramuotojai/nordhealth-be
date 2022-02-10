@@ -1,15 +1,5 @@
-from django.db import models
-
 # Create your models here.
 from django.db import models
-
-
-class GeeksModel(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-
-    def __str__(self):
-        return self.title
 
 
 class ProductsModel(models.Model):
@@ -21,3 +11,12 @@ class ProductsModel(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class GeeksModel(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.TextField()
+    shopping_cart = models.ManyToManyField(ProductsModel, blank=True, related_name='geeks')
+
+    def __str__(self):
+        return self.name

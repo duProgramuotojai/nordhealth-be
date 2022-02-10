@@ -1,8 +1,5 @@
-from operator import attrgetter
-
-from django.shortcuts import render
 # import viewsets
-from rest_framework import viewsets, filters, generics, status, response
+from rest_framework import viewsets, filters, status, response
 
 # import local data
 from rest_framework.response import Response
@@ -11,13 +8,27 @@ from .serializers import GeeksSerializer, ProductsSerializer
 from .models import GeeksModel, ProductsModel
 
 
-# create a viewset
 class GeeksViewSet(viewsets.ModelViewSet):
-    # define queryset
     queryset = GeeksModel.objects.all()
-
-    # specify serializer to be used
     serializer_class = GeeksSerializer
+
+    def add_to_cart(self, request, geek_id):
+        geek = GeeksModel.objects.get(pk=geek_id)
+
+        product = self.request.data.get('product')
+        if product is not None:
+            geek.shopping_cart.add(product)
+            geek.save()
+            return response.Response(status=status.HTTP_204_NO_CONTENT)
+
+    def remove_from_cart(self, request, geek_id):
+        geek = GeeksModel.objects.get(pk=geek_id)
+
+        product = self.request.data.get('product')
+        if product is not None:
+            geek.shopping_cart.remove(product)
+            geek.save()
+            return response.Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ProductsViewSet(viewsets.ModelViewSet):
@@ -45,8 +56,7 @@ class ProductsViewSet(viewsets.ModelViewSet):
         sorting_property = self.request.query_params.get('sort')
         order = self.request.query_params.get('order')
         products = ProductsModel.objects
-        properties = map(attrgetter('attname'), ProductsModel._meta.get_fields())
-        if sorting_property in properties:
+        if sorting_property in ProductsSerializer.Meta.fields:
             products = products.order_by(sorting_property)
             if order == "desc":
                 products = products.reverse()
