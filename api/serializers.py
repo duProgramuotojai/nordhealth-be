@@ -14,3 +14,4 @@ class ProductsSerializer(serializers.HyperlinkedModelSerializer):
         model = ProductsModel
         fields = ('id', 'title', 'description', 'barcode', 'price')
 
+

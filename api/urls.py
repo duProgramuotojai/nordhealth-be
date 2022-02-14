@@ -17,6 +17,7 @@ router.register(r'products', ProductsViewSet)
 urlpatterns = [
 	path('', include(router.urls)),
 
+	path('geeks/<int:geek_id>/cart', GeeksViewSet.as_view({'get': 'cart'}), name="geeks_view_set"),
 	path('geeks/<int:geek_id>/add-to-cart', GeeksViewSet.as_view({'post': 'add_to_cart'}), name="geeks_view_set"),
 	path('geeks/<int:geek_id>/remove-from-cart', GeeksViewSet.as_view({'post': 'remove_from_cart'}), name="geeks_view_set"),
 

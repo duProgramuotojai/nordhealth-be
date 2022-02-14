@@ -5,34 +5,33 @@ from rest_framework import viewsets, filters, status, response
 from rest_framework.response import Response
 
 from .serializers import GeeksSerializer, ProductsSerializer
-from .models import GeeksModel, ProductsModel
+from .models import GeeksModel, ProductsModel, Cart
 
 
 class GeeksViewSet(viewsets.ModelViewSet):
     queryset = GeeksModel.objects.all()
     serializer_class = GeeksSerializer
 
+    def cart(self, request, geek_id):
+        geek = GeeksModel.objects.get(pk=geek_id)
+        return Response(geek.shopping_cart.values())
+
     def add_to_cart(self, request, geek_id):
         geek = GeeksModel.objects.get(pk=geek_id)
-
-        product = self.request.data.get('product')
+        product = ProductsModel.objects.get(pk=self.request.data.get('product'))
         if product is not None:
-            geek.shopping_cart.add(product)
-            geek.save()
+            cart_item = Cart(geek=geek, product=product, count=1)
+            cart_item.save()
             return response.Response(status=status.HTTP_204_NO_CONTENT)
 
     def remove_from_cart(self, request, geek_id):
         geek = GeeksModel.objects.get(pk=geek_id)
-
-        product = self.request.data.get('product')
-        if product is not None:
-            geek.shopping_cart.remove(product)
-            geek.save()
-            return response.Response(status=status.HTTP_204_NO_CONTENT)
+        product = ProductsModel.objects.get(pk=self.request.data.get('product'))
+        geek.shopping_cart.filter(id=product.id).first().cart_set.first().delete()
+        return response.Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ProductsViewSet(viewsets.ModelViewSet):
-    # define queryset ̰
     queryset = ProductsModel.objects.all()
 
     # specify serializer to be used
@@ -71,5 +70,3 @@ class ProductsViewSet(viewsets.ModelViewSet):
 
     def perform_destroy(self, instance):
         instance.delete()
-
-
