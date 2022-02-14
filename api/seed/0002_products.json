@@ -1,0 +1,22 @@
+[
+    {
+        "model": "api.ProductsModel",
+        "pk": 1,
+        "fields": {
+          "title": "banana",
+          "description": "delicious banana from Columbia",
+          "barcode": "banana",
+          "price": 120
+        }
+    },
+    {
+      "model": "api.ProductsModel",
+      "pk": 2,
+      "fields": {
+        "title": "apple",
+        "description": "delicious apple from Finland",
+        "barcode": "apple",
+        "price": 13
+      }
+    }
+]

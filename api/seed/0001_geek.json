@@ -1,0 +1,11 @@
+[
+    {
+        "model": "api.GeeksModel",
+        "pk": 1,
+        "fields": {
+          "name": "Mr Nordhealth",
+          "description": "Mr Nordhealth"
+
+        }
+    }
+]
